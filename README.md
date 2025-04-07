@@ -9,6 +9,7 @@ This stage involves data cleaning processes alongside Data Warehouse Design. A s
 Given that the project serves as an introduction to BI concepts, dimensions are kept as Type 0 and facts are transactional, with the granularity defined at the transaction level.
 
 Physical Model
+<img width="616" alt="image" src="https://github.com/user-attachments/assets/c1370f3c-f274-46ed-add9-06020fee5116" />
 
 **3]ETL Process**
 ETL processes for all dimensions are developed using Azure Data Factory and executed in this phase. The process successfully loads 100% of the source data into respective facts and dimensions. Details of data consistency checks can be found in the attached PDF document.
