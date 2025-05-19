@@ -1,0 +1,189 @@
+/*
+ * ER/Studio Data Architect SQL Code Generation
+ * Project :      NYPD_Arrest_Data.DM1
+ *
+ * Date Created : Thursday, February 13, 2025 23:09:04
+ * Target DBMS : Microsoft SQL Server 2019
+ */
+
+/* 
+ * TABLE: Arrest_Fact 
+ */
+
+CREATE TABLE Arrest_Fact(
+    ArresteeDimSK    int             NOT NULL,
+    CrimeDimSK       int             NOT NULL,
+    LocationDimSK    int             NOT NULL,
+    DateDimSK        int             NOT NULL,
+    RaceDimSK        char(10)        NOT NULL,
+    ArrestKey        int             NOT NULL,
+    DIJobID          varchar(100)    NULL,
+    DILoadDT         date            NULL,
+    CONSTRAINT PK3 PRIMARY KEY NONCLUSTERED (ArresteeDimSK, CrimeDimSK, LocationDimSK, DateDimSK, RaceDimSK)
+)
+
+go
+
+
+IF OBJECT_ID('Arrest_Fact') IS NOT NULL
+    PRINT '<<< CREATED TABLE Arrest_Fact >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE Arrest_Fact >>>'
+go
+
+/* 
+ * TABLE: Arrestee_Dim 
+ */
+
+CREATE TABLE Arrestee_Dim(
+    ArresteeDimSK    int             NOT NULL,
+    DIJobID          varchar(100)    NULL,
+    DILoadDT         date            NULL,
+    Age_Group        varchar(100)    NULL,
+    Perp_Sex         varchar(10)     NULL,
+    CONSTRAINT ArresteePK PRIMARY KEY NONCLUSTERED (ArresteeDimSK)
+)
+
+go
+
+
+IF OBJECT_ID('Arrestee_Dim') IS NOT NULL
+    PRINT '<<< CREATED TABLE Arrestee_Dim >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE Arrestee_Dim >>>'
+go
+
+/* 
+ * TABLE: Crime_Dim 
+ */
+
+CREATE TABLE Crime_Dim(
+    CrimeDimSK      int             NOT NULL,
+    DIJobID         varchar(100)    NULL,
+    DILoadDT        date            NULL,
+    PD_CD           tinyint         NULL,
+    PD_Desc         varchar(10)     NULL,
+    KY_CD           tinyint         NULL,
+    Offense_Desc    varchar(100)    NULL,
+    Law_Code        varchar(50)     NULL,
+    Law_Cat_CD      varchar(50)     NULL,
+    CONSTRAINT PK1 PRIMARY KEY NONCLUSTERED (CrimeDimSK)
+)
+
+go
+
+
+IF OBJECT_ID('Crime_Dim') IS NOT NULL
+    PRINT '<<< CREATED TABLE Crime_Dim >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE Crime_Dim >>>'
+go
+
+/* 
+ * TABLE: Date_Dim 
+ */
+
+CREATE TABLE Date_Dim(
+    DateDimSK    int             NOT NULL,
+    DayName      varchar(50)     NULL,
+    DayAbbr      varchar(3)      NULL,
+    DayNum       tinyint         NULL,
+    MonthName    varchar(50)     NULL,
+    MonthAbbr    varchar(5)      NULL,
+    MonthNum     tinyint         NULL,
+    QTRNum       tinyint         NULL,
+    DT           date            NULL,
+    YearNum      smallint        NULL,
+    IsWeekend    tinyint         NULL,
+    DIJobID      varchar(100)    NULL,
+    DILoadDT     date            NULL,
+    CONSTRAINT DateDimPK PRIMARY KEY NONCLUSTERED (DateDimSK)
+)
+
+go
+
+
+IF OBJECT_ID('Date_Dim') IS NOT NULL
+    PRINT '<<< CREATED TABLE Date_Dim >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE Date_Dim >>>'
+go
+
+/* 
+ * TABLE: Location_Dim 
+ */
+
+CREATE TABLE Location_Dim(
+    LocationDimSK     int               NOT NULL,
+    DIJobID           varchar(100)      NULL,
+    DILoadDT          date              NULL,
+    Arrest_Boro       varchar(100)      NULL,
+    Arrest_Precint    varchar(100)      NULL,
+    X_Coord_CD        varchar(100)      NULL,
+    Y_Coord_CD        varchar(100)      NULL,
+    Latitude          decimal(10, 0)    NULL,
+    Longitude         decimal(10, 0)    NULL,
+    CONSTRAINT LocationDimSK PRIMARY KEY NONCLUSTERED (LocationDimSK)
+)
+
+go
+
+
+IF OBJECT_ID('Location_Dim') IS NOT NULL
+    PRINT '<<< CREATED TABLE Location_Dim >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE Location_Dim >>>'
+go
+
+/* 
+ * TABLE: RaceDim 
+ */
+
+CREATE TABLE RaceDim(
+    RaceDimSK     char(10)        NOT NULL,
+    DILoadDT      date            NULL,
+    DIJobID       varchar(100)    NULL,
+    Perp_Race     varchar(50)     NULL,
+    ArresteeID    int             NULL,
+    CONSTRAINT RaceDimPK PRIMARY KEY NONCLUSTERED (RaceDimSK)
+)
+
+go
+
+
+IF OBJECT_ID('RaceDim') IS NOT NULL
+    PRINT '<<< CREATED TABLE RaceDim >>>'
+ELSE
+    PRINT '<<< FAILED CREATING TABLE RaceDim >>>'
+go
+
+/* 
+ * TABLE: Arrest_Fact 
+ */
+
+ALTER TABLE Arrest_Fact ADD CONSTRAINT RefDate_Dim1 
+    FOREIGN KEY (DateDimSK)
+    REFERENCES Date_Dim(DateDimSK)
+go
+
+ALTER TABLE Arrest_Fact ADD CONSTRAINT RefArrestee_Dim2 
+    FOREIGN KEY (ArresteeDimSK)
+    REFERENCES Arrestee_Dim(ArresteeDimSK)
+go
+
+ALTER TABLE Arrest_Fact ADD CONSTRAINT RefCrime_Dim3 
+    FOREIGN KEY (CrimeDimSK)
+    REFERENCES Crime_Dim(CrimeDimSK)
+go
+
+ALTER TABLE Arrest_Fact ADD CONSTRAINT RefLocation_Dim4 
+    FOREIGN KEY (LocationDimSK)
+    REFERENCES Location_Dim(LocationDimSK)
+go
+
+ALTER TABLE Arrest_Fact ADD CONSTRAINT RefRaceDim5 
+    FOREIGN KEY (RaceDimSK)
+    REFERENCES RaceDim(RaceDimSK)
+go
+
+
