@@ -17,5 +17,10 @@ ETL processes for all dimensions are developed using Azure Data Factory and exec
 **4]Visualizations**
 Visualizations are created from the Data Warehouse schema using Tableau and Power BI. All visualizations are cross-verified using SQL commands. (attached as sql_validations.SQL file in the main repository)
 
+<img width="615" alt="image" src="https://github.com/user-attachments/assets/d9b11013-e622-49cb-bc11-b13c2fb625d3" />
+<img width="603" alt="image" src="https://github.com/user-attachments/assets/4d07ffa1-c2c2-4b6b-8bea-b3cc36e35012" />
+
+
+
 
 
